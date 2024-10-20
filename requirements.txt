@@ -1,0 +1,3 @@
+yt-dlp
+pydub  # Apenas se você usar pydub para manipulações adicionais de áudio
+
