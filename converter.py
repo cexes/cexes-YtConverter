@@ -1,13 +1,13 @@
 import os
 import yt_dlp
 
-def baixar_video_youtube(url, pasta_destino):
+def download_youtube_video(url, save_path):
     ydl_opts = {
         'format': 'bestaudio/best',
-        'extractaudio': True,  # Extrai apenas o áudio
-        'audioformat': 'mp3',  # Converte para MP3
-        'outtmpl': os.path.join(pasta_destino, '%(title)s.%(ext)s'),  # Salva como MP3
-        'postprocessors': [{  # Adiciona um pós-processador para converter para MP3
+        'extractaudio': True,
+        'audioformat': 'mp3',
+        'outtmpl': os.path.join(save_path, '%(title)s.%(ext)s'),
+        'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
             'preferredquality': '192',
@@ -15,18 +15,24 @@ def baixar_video_youtube(url, pasta_destino):
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        print(f"Baixando: {url}")
-        ydl.download([url])
+        print(f"Downloading: {url}")
+        try:
+            ydl.download([url])
+        except Exception as e:
+            print(f"An error occurred during the download: {e}")
 
 def main():
-    url = input("Digite a URL do vídeo do YouTube: ")
-    pasta_destino = input("Digite o caminho da pasta onde deseja salvar o MP3: ")
+    url = input("Enter the YouTube video URL: ")
+    print(f"URL entered: {url}")
 
-    os.makedirs(pasta_destino, exist_ok=True)
+    save_path = "/home/c-sar-oliveira/Music"
 
-    baixar_video_youtube(url, pasta_destino)
-    print("Download e conversão concluídos! Verifique a pasta especificada.")
+    if not os.path.exists(save_path):
+        print(f"The folder {save_path} does not exist. Creating the folder.")
+        os.makedirs(save_path)
+
+    download_youtube_video(url, save_path)
+    print("Download and conversion completed! Check the specified folder.")
 
 if __name__ == "__main__":
     main()
-
